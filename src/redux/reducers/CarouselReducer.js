@@ -1,4 +1,4 @@
-import { SET_CAROUSEL } from "../actions/Type/CarouselType";
+import { SET_CAROUSEL } from "../actions/Types/CarouselType"
 
 const stateDefault = {
   arrImg: [

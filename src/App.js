@@ -15,7 +15,8 @@ function App() {
   return (
     <Router history={history}>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<HomeTemplate component={Home} />} />
         <Route path="/home" element={<HomeTemplate component={Home} />} />
         <Route path="/contact" element={<HomeTemplate component={Contact} />} />
         <Route path="/news" element={<HomeTemplate component={News} />} />

@@ -8,7 +8,6 @@ const HomeTemplate = ({ component: Component, ...restProps }) => {
   return (
     <Fragment>
       <Header />
-      <HomeCarousel />
       <Component />
       {/* <Routes>
         <Route {...restProps} element={<Component />} />

@@ -71,7 +71,7 @@ export default function Detail(props) {
               alo123355
             </TabPane>
             <TabPane tab="tab 3" key="3">
-              alo12344444
+              alo12344444444
             </TabPane>
           </Tabs>
         </div>

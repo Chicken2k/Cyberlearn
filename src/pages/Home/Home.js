@@ -10,7 +10,6 @@ export default function Home(props) {
   // props.match.params
   const { arrFilm } = useSelector((state) => state.QuanLyPhimReducer);
   const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
-
   const dispatch = useDispatch();
   // se kich hoat sau khi load
   useEffect(() => {

@@ -1,6 +1,5 @@
-import { login } from "../../services/UserManagementService";
-import { LOG_IN_ACTION } from "./Types/QuanLyNguoiDungType";
-import {history} from '../../App'
+import {historyUserBookingService, login } from "../../services/UserManagementService";
+import { HISTORY_USER_BOOKING, LOG_IN_ACTION } from "./Types/QuanLyNguoiDungType";
 
 export const logInAction = (loginInformation) => {
   return async (dispatch) => {
@@ -20,3 +19,24 @@ export const logInAction = (loginInformation) => {
     }
   };
 };
+
+export const historyUserBookingAction = ()=>{
+  return async (dispatch)=>{
+    try{ 
+      dispatch({type:'DISPLAY_LOADING'})
+    const result = await historyUserBookingService()
+        if(result.data.statusCode === 200) {
+          dispatch({
+            type:HISTORY_USER_BOOKING,
+            historyUserBooking: result.data.content
+          })
+        }
+        dispatch({type:'HIDE_LOADING'})
+    }
+    catch(errors){
+      dispatch({type:'HIDE_LOADING'})
+      console.log("errors", errors);
+    }
+  
+  }
+}

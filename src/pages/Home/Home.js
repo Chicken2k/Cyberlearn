@@ -10,7 +10,6 @@ export default function Home(props) {
   // props.match.params
   const { arrFilm } = useSelector((state) => state.FilmManagementReducer);
   const { CinemaSystem } = useSelector((state) => state.CinemaManagerReducer);
-
   const dispatch = useDispatch();
   // se kich hoat sau khi load
   useEffect(() => {

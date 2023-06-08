@@ -13,6 +13,7 @@ import Detail from "./pages/Detail.js/Detail";
 import Checkout from "./pages/Checkout/Checkout";
 import {Suspense, lazy} from 'react'
 import UserTemplate from "./templates/UserTemplate/UserTemplate";
+import Loading from "./components/Loading/Loading";
 
 const CheckoutTemplateLazy = lazy(()=> import("./templates/CheckoutTemplate/CheckoutTemplate"))
 export const history = createBrowserHistory();
@@ -20,8 +21,8 @@ export const history = createBrowserHistory();
 function App() {
   return (
     <Router history={history}>
+    <Loading/>
       <Routes>
-       
         <Route path="/" element={<HomeTemplate component={Home} />} />
         <Route path="/home" element={<HomeTemplate component={Home} />} />
         <Route path="/contact" element={<HomeTemplate component={Contact} />} />

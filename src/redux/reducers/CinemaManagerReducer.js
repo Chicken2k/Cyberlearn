@@ -4,6 +4,7 @@ const stateDefault = {
   CinemaSystem: [],
 };
 export const CinemaManagerReducer = (state = stateDefault, action) => {
+
   switch (action.type) {
     case SET_CINEMA_SYSTEM:
       state.CinemaSystem  = action.CinemaSystem;

@@ -1,1 +1,3 @@
 export const LOG_IN_ACTION = 'LOG_IN_ACTION';
+
+export const HISTORY_USER_BOOKING = 'HISTORY_USER_BOOKING';

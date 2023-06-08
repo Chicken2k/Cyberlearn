@@ -3,6 +3,7 @@ import { GROUPID } from "../util/Setting/config";
 
 
 export const getListofTheaterSystems = () => {
+
   return get(`/api/QuanLyRap/LayThongTinLichChieuHeThongRap?maNhom=${GROUPID}`);
 };
 export const getMovieShowtimeInformation = (movieCode) => {

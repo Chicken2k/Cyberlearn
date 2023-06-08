@@ -11,10 +11,16 @@ import {
 } from "../../redux/actions/TicketManagementActions";
 import "./Checkout.css";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
-import { BOOK_TICKET } from "../../redux/actions/Types/QuanLyDatVeType";
+import {
+  BOOK_TICKET,
+  SWITCH_TABS,
+} from "../../redux/actions/Types/QuanLyDatVeType";
 import { BookingInformation } from "../../_core/Models/BookingInformation";
+import { Tabs } from "antd";
+import { historyUserBookingAction } from "../../redux/actions/UserManagementAction";
+import moment from "moment";
 
-export default function Checkout() {
+function Checkout() {
   const useParam = useParams();
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.reducerUserManagement);
@@ -23,26 +29,25 @@ export default function Checkout() {
   );
   const { thongTinPhim, danhSachGhe } = roomDetails;
   const { id } = useParam;
-  console.log(listofSeatsReserved);
 
   useEffect(() => {
     dispatch(TicketManagementActions(id));
   }, []);
 
   const renderSeats = () => {
-    return danhSachGhe.map((ghe, index) => {
-      let classGheVip = ghe.loaiGhe === "Vip" ? "gheVip classGheDaDat" : "";
-      let classGheDaDat = ghe.daDat === true ? "gheDaDat " : "";
+    return danhSachGhe.map((seat, index) => {
+      let classGheVip = seat.loaiGhe === "Vip" ? "gheVip classGheDaDat" : "";
+      let classGheDaDat = seat.daDat === true ? "gheDaDat " : "";
       let classGheDangDat = "";
       let classGheDaDuocDat = "";
       let indexGheDD = listofSeatsReserved.findIndex(
-        (bookedChair) => bookedChair.maGhe === ghe.maGhe
+        (bookedChair) => bookedChair.maGhe === seat.maGhe
       );
 
       if (indexGheDD !== -1) {
         classGheDangDat = "gheDangDat";
       }
-      if (userLogin.taiKhoan === ghe.taiKhoanNguoiDat) {
+      if (userLogin.taiKhoan === seat.taiKhoanNguoiDat) {
         classGheDaDuocDat = "gheDaDuocDat";
       }
       return (
@@ -51,32 +56,34 @@ export default function Checkout() {
             onClick={() => {
               dispatch({
                 type: BOOK_TICKET,
-                selectedChair: ghe,
+                selectedChair: seat,
               });
             }}
-            disabled={ghe.daDat}
+            disabled={seat.daDat}
             className={`ghe ${classGheVip} ${classGheDaDat} ${classGheDangDat} ${classGheDaDuocDat}`}
           >
-            {ghe.daDat === true ? (
+            {seat.daDat === true ? (
               classGheDaDuocDat != "" ? (
-                <UserOutlined
-                  style={{ fontWeight: "bold" }}
-                />
+                <UserOutlined style={{ fontWeight: "bold" }} />
               ) : (
-                <CloseOutlined
-                  style={{  fontWeight: "bold" }}
-                />
+                <CloseOutlined style={{ fontWeight: "bold" }} />
               )
             ) : (
-              ghe.stt
+              seat.stt
             )}
           </button>
-          {(index + 1) % 16 === 0 ?<div><hr/> <br /></div> : ""}
+          {(index + 1) % 16 === 0 ? (
+            <div>
+              <hr /> <br />
+            </div>
+          ) : (
+            ""
+          )}
         </Fragment>
       );
     });
   };
-  const handleDatVe = () => {
+  const handleBooking = () => {
     const bookingInformation = new BookingInformation();
     bookingInformation.maLichChieu = id; // Gán mã lịch chiếu từ useParams
     bookingInformation.danhSachVe = listofSeatsReserved;
@@ -109,15 +116,19 @@ export default function Checkout() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td  style={{ textAlign: "center" }}>
+                  <td style={{ textAlign: "center" }}>
                     <button className="ghe text-center">
                       {" "}
                       <UserOutlined
-                        style={{ marginBottom: 7.5, fontWeight: "bold",textAlign: "center" }}
+                        style={{
+                          marginBottom: 7.5,
+                          fontWeight: "bold",
+                          textAlign: "center",
+                        }}
                       />{" "}
                     </button>{" "}
                   </td>
-                  <td  style={{ textAlign: "center" }}>
+                  <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDangDat text-center">
                       {" "}
                       <UserOutlined
@@ -125,14 +136,14 @@ export default function Checkout() {
                       />
                     </button>{" "}
                   </td>
-                  <td  style={{ textAlign: "center" }}>
+                  <td style={{ textAlign: "center" }}>
                     <button className="ghe gheVip text-center">
                       <UserOutlined
                         style={{ marginBottom: 7.5, fontWeight: "bold" }}
                       />
                     </button>{" "}
                   </td>
-                  <td  style={{ textAlign: "center" }}>
+                  <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDaDat text-center">
                       {" "}
                       <UserOutlined
@@ -140,7 +151,7 @@ export default function Checkout() {
                       />{" "}
                     </button>{" "}
                   </td>
-                  <td  style={{ textAlign: "center" }}>
+                  <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDaDuocDat text-center">
                       {" "}
                       <UserOutlined
@@ -203,7 +214,7 @@ export default function Checkout() {
           <div className="mb-0 h-full flex flex-col items-center">
             <div
               onClick={() => {
-                handleDatVe();
+                handleBooking();
               }}
               className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer"
             >
@@ -213,5 +224,99 @@ export default function Checkout() {
         </div>
       </div>
     </div>
+  );
+}
+function BookingHistory() {
+  const { historyUserBooking } = useSelector(
+    (state) => state.reducerUserManagement
+  );
+  console.log(historyUserBooking);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(historyUserBookingAction());
+  }, []);
+
+  const renderHistory = () => {
+    return historyUserBooking.thongTinDatVe?.map((ticket, index) => {
+      return (
+        <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
+          <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+            <img
+              alt="team"
+              className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
+              src={ticket.hinhAnh}
+            />
+            <div className="flex-grow">
+              <h2 className="text-gray-900 title-font font-medium">
+                {ticket.tenPhim}
+              </h2>
+              <p className="text-gray-500">
+                Giờ chiếu : {moment(ticket.ngayDat).format("hh:mm A")} - Ngày
+                chiếu {moment(ticket.ngayDat).format("DD-MM-YYYY")}
+              </p>
+              <p>
+                {" "}
+                Ghế đã đặt :
+                {ticket.danhSachGhe
+                  .sort((a, b) => {
+                    return a.tenGhe - b.tenGhe;
+                  })
+                  .map((chair, index) => {
+                    return <span key={index}> {chair.tenGhe}</span>;
+                  })}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
+  return (
+    <Fragment>
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-24 mx-auto">
+          <div className="flex flex-col text-center w-full mb-20">
+            <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-purple-600">
+              Lịch sử đặt vé
+            </h1>
+            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+              Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical
+              gentrify, subway tile poke farm-to-table. Franzen you probably
+              haven't heard of them.
+            </p>
+          </div>
+          <div className="flex flex-wrap -m-2">{renderHistory()}</div>
+        </div>
+      </section>
+    </Fragment>
+  );
+}
+
+export default function MyComponent() {
+  const { tabActive } = useSelector((state) => state.TicketManagementReducer);
+  const dispatch = useDispatch();
+  const onChange = (key) => {
+    dispatch({ type: SWITCH_TABS, tabActive: key });
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: `01  CHỌN GHẾ  & THANH TOÁN`,
+      children: <Checkout />,
+    },
+    {
+      key: "2",
+      label: `02 LỊCH ĐẶT VÉ  `,
+      children: <BookingHistory />,
+    },
+  ];
+  return (
+    <Tabs
+      defaultActiveKey="1"
+      activeKey={tabActive}
+      items={items}
+      onChange={onChange}
+    />
   );
 }

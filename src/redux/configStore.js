@@ -9,12 +9,14 @@ import { FilmManagementReducer } from "./reducers/FilmManagementReducer";
 import { CinemaManagerReducer } from "./reducers/CinemaManagerReducer";
 import { reducerUserManagement } from "./reducers/UserManagementReducer";
 import { TicketManagementReducer } from "./reducers/TicketManagementReducer";
+import { loadingReducer } from "./reducers/LoadingReducer";
 const rootReducer = combineReducers({
   // state ung dung
   CarouselReducer,
   FilmManagementReducer,
   CinemaManagerReducer,
   reducerUserManagement,
-  TicketManagementReducer
+  TicketManagementReducer,
+  loadingReducer
 });
 export const store = createStore(rootReducer, applyMiddleware(thunk));

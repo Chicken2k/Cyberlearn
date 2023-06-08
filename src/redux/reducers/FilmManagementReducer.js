@@ -44,6 +44,7 @@ const stateDefault = {
   filmDetail:{}
 };
 export const FilmManagementReducer = (state = stateDefault, action) => {
+
   switch (action.type) {
     case SET_LIST_MOVIE:
       state.arrFilm = action.arrFilm === undefined ? state.arrFilmDefault : action.arrFilm;

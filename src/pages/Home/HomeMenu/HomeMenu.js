@@ -11,7 +11,7 @@ const Demo = (props) => {
   };
 
   const renderHeThongRap = () => {
-    return props.heThongRapChieu?.map((heThongRap, index) => {
+    return props.CinemaSystem?.map((heThongRap, index) => {
       return <TabPane tab={<img src={heThongRap.logo} className="rounded-full" width="50" />} key={index}>
           <Tabs tabPosition={tabPosition}>
               {heThongRap.lstCumRap?.map((cumRap, index) => {

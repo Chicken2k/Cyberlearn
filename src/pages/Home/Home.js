@@ -3,18 +3,19 @@ import HomeMenu from "./HomeMenu/HomeMenu";
 import { useSelector, useDispatch } from "react-redux";
 import Film from "../../components/Film/Film";
 import MultipleRowSlick from "../../components/RSLick/MultipleRowSlick";
-import { layDanhSachPhimAction } from "../../redux/actions/QuanLyPhimAction";
-import { layDanhSachHeThongRapAction } from "../../redux/actions/QuanLyRapAction";
+import { getMovieListAction } from "../../redux/actions/FilmManagementAction";
+import { getListofCinemaSystemAction } from "../../redux/actions/CinemaManagerAction";
 import HomeCarousel from "../../templates/HomeTemplate/Layout/HomeCarousel/HomeCarousel";
 export default function Home(props) {
   // props.match.params
-  const { arrFilm } = useSelector((state) => state.QuanLyPhimReducer);
-  const { heThongRapChieu } = useSelector((state) => state.QuanLyRapReducer);
+  const { arrFilm } = useSelector((state) => state.FilmManagementReducer);
+  const { CinemaSystem } = useSelector((state) => state.CinemaManagerReducer);
+
   const dispatch = useDispatch();
   // se kich hoat sau khi load
   useEffect(() => {
-    dispatch(layDanhSachPhimAction());
-    dispatch(layDanhSachHeThongRapAction());
+    dispatch(getMovieListAction());
+    dispatch(getListofCinemaSystemAction());
   }, []);
   // const renderArrFilm = () => {
   //  return arrFilm.map((item, index) => {
@@ -32,7 +33,7 @@ export default function Home(props) {
       </section>
 
       <div className="mx-36">
-        <HomeMenu heThongRapChieu={heThongRapChieu} />
+        <HomeMenu CinemaSystem={CinemaSystem} />
       </div>
     </div>
   );

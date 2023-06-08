@@ -1,9 +1,9 @@
 import {
-  SET_DANH_SACH_PHIM,
-  SET_FILM_DANG_CHIEU,
-  SET_FILM_SAP_CHIEU,
+  SET_LIST_MOVIE,
+  SET_FILM_PLAYING_SHOWING,
+  SET_FILM_COMING_SOON,
 } from "../actions/Types/QuanLyphimType";
-import { SET_CHI_TIET_PHIM } from "../actions/Types/QuayLyRapType";
+import { SET_DETAILS_MOVIE } from "../actions/Types/QuayLyRapType";
 
 const stateDefault = {
   arrFilm: [
@@ -38,28 +38,29 @@ const stateDefault = {
       sapChieu: false,
     },
   ],
-  dangChieu: true,
-  sapChieu: true,
+  movieIsPlay: true,
+  upcomingMovie: true,
   arrFilmDefault: [],
   filmDetail:{}
 };
-export const QuanLyPhimReducer = (state = stateDefault, action) => {
+export const FilmManagementReducer = (state = stateDefault, action) => {
   switch (action.type) {
-    case SET_DANH_SACH_PHIM:
+    case SET_LIST_MOVIE:
       state.arrFilm = action.arrFilm === undefined ? state.arrFilmDefault : action.arrFilm;
       state.arrFilmDefault = action.arrFilm === undefined ? state.arrFilmDefault : action.arrFilm;
       return { ...state };
-    case SET_FILM_DANG_CHIEU:
+    case SET_FILM_PLAYING_SHOWING:
       state.arrFilm = state.arrFilmDefault.filter(
-        (film) => film.dangChieu === state.dangChieu
+        (film) => film.dangChieu  === state.movieIsPlay
+      );
+      
+      return { ...state };
+    case SET_FILM_COMING_SOON:
+      state.arrFilm = state.arrFilmDefault.filter(
+        (film) => film.sapChieu  === state.upcomingMovie 
       );
       return { ...state };
-    case SET_FILM_SAP_CHIEU:
-      state.arrFilm = state.arrFilmDefault.filter(
-        (film) => film.sapChieu === state.dangChieu 
-      );
-      return { ...state };
-    case SET_CHI_TIET_PHIM:
+    case SET_DETAILS_MOVIE:
       state.filmDetail = action.filmDetail
     return { ...state };
     default:

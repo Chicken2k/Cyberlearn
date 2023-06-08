@@ -6,18 +6,19 @@ import { Rate, Tabs } from "antd";
 import useSelection from "antd/es/table/hooks/useSelection";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
-import { layThongTinLichChieuPhimAction } from "../../redux/actions/QuanLyRapAction";
+import { GetMovieShowtimeInformationAction } from "../../redux/actions/CinemaManagerAction";
 import moment from "moment";
 
 const { TabPane } = Tabs;
 export default function Detail(props) {
-  const { filmDetail } = useSelector((state) => state.QuanLyPhimReducer);
+  const { filmDetail } = useSelector((state) => state.FilmManagementReducer);
+  console.log(filmDetail);
   const dispatch = useDispatch();
   const useParam = useParams();
   useEffect(() => {
     //Lấy thông tin param từ url
     const { id } =useParam
-    dispatch(layThongTinLichChieuPhimAction(id));
+    dispatch(GetMovieShowtimeInformationAction(id));
   }, []);
 
   return (
@@ -92,7 +93,7 @@ export default function Detail(props) {
             <TabPane tab="Lịch chiếu" key="1" style={{ minHeight: 300 }}>
               <div>
                 <Tabs tabPosition={"left"}>
-                  {filmDetail.heThongRapChieu?.map((htr, index) => {
+                  {filmDetail.heThongRapChieu?.map((cinemaSystem, index) => {
                     return (
                       <TabPane
                         tab={
@@ -100,20 +101,20 @@ export default function Detail(props) {
                             <img
                               className="rounded-full w-full"
                               style={{ width: 50 }}
-                              src={htr.logo}
+                              src={cinemaSystem.logo}
                             />
-                            <div className="text-center ml-2">{htr.tenHeThongRap}</div>
+                            <div className="text-center ml-2">{cinemaSystem.tenHeThongRap}</div>
                           </div>
                         }
                         key={index}
                       >
-                        {htr.cumRapChieu.map((cumChieu, index) => {
+                        {cinemaSystem.cumRapChieu.map((Cineplex, index) => {
                           return (
                             <div key={index}>
                               <div className="flex flex-row">
                                 <img
                                   className="rounded-full w-full"
-                                  src={cumChieu.hinhAnh}
+                                  src={Cineplex.hinhAnh}
                                   style={{ width: 50 }}
                                 ></img>
                                 <div>
@@ -124,27 +125,27 @@ export default function Detail(props) {
                                       lineHeight: 1,
                                     }}
                                   >
-                                    {cumChieu.tenCumRap}
+                                    {Cineplex.tenCumRap}
                                   </p>
                                   <p
                                     className="text-gray-400"
                                     style={{ marginTop: 0 }}
                                   >
-                                    {cumChieu.diaChi}
+                                    {Cineplex.diaChi}
                                   </p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-4">
-                                {cumChieu.lichChieuPhim.map(
-                                  (lichChieu, index) => {
+                                {Cineplex.lichChieuPhim.map(
+                                  (Showtimes, index) => {
                                     return (
                                       <NavLink
-                                        to={`/checkout/${lichChieu.maLichChieu}`}
+                                        to={`/checkout/${Showtimes.maLichChieu}`}
                                         key={index}
                                         className="col-span-1 text-green-800 font-bold"
                                       >
                                         {moment(
-                                          lichChieu.ngayChieuGioChieu
+                                          Showtimes.ngayChieuGioChieu
                                         ).format("hh:mm A")}
                                       </NavLink>
                                     );

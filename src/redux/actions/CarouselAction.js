@@ -1,12 +1,11 @@
-import axios from "axios";
-import { DOMAIN } from "../../util/Setting/config";
+
 import {SET_CAROUSEL} from "./Types/CarouselType"
-import { layDanhSachBanner } from "../../services/QuanLyPhimService";
+import { getListBanner } from "../../services/FilmManagementService";
 export const getCarouselAction = () => {
   return async (dispatch) => {
     try {
       //Sử dụng tham số thamSo
-      const result = await layDanhSachBanner()
+      const result = await getListBanner()
 
       dispatch({
         type: SET_CAROUSEL,

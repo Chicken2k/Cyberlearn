@@ -2,9 +2,9 @@ import { put, post, get, deleteItem } from "./baseService";
 import { GROUPID } from "../util/Setting/config";
 
 
-export const layDanhSachHeThongRap = () => {
+export const getListofTheaterSystems = () => {
   return get(`/api/QuanLyRap/LayThongTinLichChieuHeThongRap?maNhom=${GROUPID}`);
 };
-export const layThongTinLichChieuPhim = (maPhim) => {
-  return get(`/api/QuanLyRap/LayThongTinLichChieuPhim?maPhim=${maPhim}`);
+export const getMovieShowtimeInformation = (movieCode) => {
+  return get(`/api/QuanLyRap/LayThongTinLichChieuPhim?maPhim=${movieCode}`);
 };

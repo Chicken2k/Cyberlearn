@@ -5,26 +5,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
-  DatVe,
-  DatVeAction,
-  QuanLyDatVeAction,
-} from "../../redux/actions/QuanLyDatVeActions";
+  bookTickets,
+  bookTicketAction,
+  TicketManagementActions,
+} from "../../redux/actions/TicketManagementActions";
 import "./Checkout.css";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
-import { DAT_VE } from "../../redux/actions/Types/QuanLyDatVeType";
-import { ThongTinDatVe } from "../../_core/Models/ThongTinDatVe";
+import { BOOK_TICKET } from "../../redux/actions/Types/QuanLyDatVeType";
+import { BookingInformation } from "../../_core/Models/BookingInformation";
 
 export default function Checkout() {
   const useParam = useParams();
   const dispatch = useDispatch();
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
-  const { chiTietPhongVe, danhSachGheDangDat } = useSelector(
-    (state) => state.QuanLyDatVeReducer
+  const { userLogin } = useSelector((state) => state.reducerUserManagement);
+  const { roomDetails, listofSeatsReserved } = useSelector(
+    (state) => state.TicketManagementReducer
   );
-  const { thongTinPhim, danhSachGhe } = chiTietPhongVe;
+  const { thongTinPhim, danhSachGhe } = roomDetails;
   const { id } = useParam;
+  console.log(listofSeatsReserved);
+
   useEffect(() => {
-    dispatch(QuanLyDatVeAction(id));
+    dispatch(TicketManagementActions(id));
   }, []);
 
   const renderSeats = () => {
@@ -33,8 +35,8 @@ export default function Checkout() {
       let classGheDaDat = ghe.daDat === true ? "gheDaDat " : "";
       let classGheDangDat = "";
       let classGheDaDuocDat = "";
-      let indexGheDD = danhSachGheDangDat.findIndex(
-        (gheDD) => gheDD.maGhe === ghe.maGhe
+      let indexGheDD = listofSeatsReserved.findIndex(
+        (bookedChair) => bookedChair.maGhe === ghe.maGhe
       );
 
       if (indexGheDD !== -1) {
@@ -48,8 +50,8 @@ export default function Checkout() {
           <button
             onClick={() => {
               dispatch({
-                type: DAT_VE,
-                gheDuocChon: ghe,
+                type: BOOK_TICKET,
+                selectedChair: ghe,
               });
             }}
             disabled={ghe.daDat}
@@ -75,10 +77,10 @@ export default function Checkout() {
     });
   };
   const handleDatVe = () => {
-    const thongTinDatVe = new ThongTinDatVe();
-    thongTinDatVe.maLichChieu = id; // Gán mã lịch chiếu từ useParams
-    thongTinDatVe.danhSachVe = danhSachGheDangDat;
-    dispatch(DatVeAction(thongTinDatVe));
+    const bookingInformation = new BookingInformation();
+    bookingInformation.maLichChieu = id; // Gán mã lịch chiếu từ useParams
+    bookingInformation.danhSachVe = listofSeatsReserved;
+    dispatch(bookTicketAction(bookingInformation));
   };
   return (
     <div className="min-h-screen mt-5">
@@ -154,7 +156,7 @@ export default function Checkout() {
 
         <div className="col-span-3">
           <h3 className="text-green-400 text-center text-4xl">
-            {danhSachGheDangDat.reduce((total, currenvalue) => {
+            {listofSeatsReserved.reduce((total, currenvalue) => {
               return total + currenvalue.giaVe;
             }, 0)}{" "}
             đ
@@ -168,19 +170,19 @@ export default function Checkout() {
             <div className="w-4/5">
               <span className="text-red-500"> GHẾ </span>
               <span className="text-green-500 text-xl">
-                {danhSachGheDangDat
+                {listofSeatsReserved
                   .sort((a, b) => {
                     return a.stt - b.stt;
                   })
                   .map((gheDDSST, index) => {
-                    return <span> {gheDDSST.stt}</span>;
+                    return <span key={index}> {gheDDSST.stt}</span>;
                   })}
               </span>
             </div>
             <div className="text-right col-span-1">
               <span className="text-green-800 text-lg">
                 {" "}
-                {danhSachGheDangDat.reduce((total, currenvalue) => {
+                {listofSeatsReserved.reduce((total, currenvalue) => {
                   return total + currenvalue.giaVe;
                 }, 0)}{" "}
                 đ

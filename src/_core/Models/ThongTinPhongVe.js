@@ -1,5 +1,5 @@
 //bai 53
-export class ThongTinLichChieu  {
+export class ShowtimeInformation  {
     thongTinPhim = new ThongTinPhim();
     danhSachGhe = [];
 }

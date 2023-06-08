@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 
 export default function Footer(props) {
 
-    const {heThongRapChieu} = useSelector(state => state.QuanLyRapReducer);
+    const {CinemaSystem} = useSelector(state => state.CinemaManagerReducer);
    
-    const arrHeThongRap = _.map(heThongRapChieu,(heThongRap) => _.pick(heThongRap,['maHeThongRap','tenHeThongRap','logo']));
+    const arrHeThongRap = _.map(CinemaSystem,(heThongRap) => _.pick(heThongRap,['maHeThongRap','tenHeThongRap','logo']));
 
     
     return (

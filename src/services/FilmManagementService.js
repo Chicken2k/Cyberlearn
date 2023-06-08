@@ -1,9 +1,9 @@
 import { put, post, get, deleteItem } from "./baseService";
 import { GROUPID } from "../util/Setting/config";
 
-export const layDanhSachBanner = () => {
+export const getListBanner = () => {
   return get(`/api/QuanLyPhim/LayDanhSachBanner`);
 };
-export const layDanhSachPhim = () => {
+export const getMovieList = () => {
   return get(`/api/QuanLyPhim/LayDanhSachPhim?maNhom=${GROUPID}`);
 };

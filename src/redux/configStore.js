@@ -5,16 +5,16 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import { CarouselReducer } from "./reducers/CarouselReducer";
-import { QuanLyPhimReducer } from "./reducers/QuanLyPhimReducer";
-import { QuanLyRapReducer } from "./reducers/QuanLyRapReducer";
-import { QuanLyNguoiDungReducer } from "./reducers/QuanLyNguoiDungReducer";
-import { QuanLyDatVeReducer } from "./reducers/QuanLyDatVeReducer";
+import { FilmManagementReducer } from "./reducers/FilmManagementReducer";
+import { CinemaManagerReducer } from "./reducers/CinemaManagerReducer";
+import { reducerUserManagement } from "./reducers/UserManagementReducer";
+import { TicketManagementReducer } from "./reducers/TicketManagementReducer";
 const rootReducer = combineReducers({
   // state ung dung
   CarouselReducer,
-  QuanLyPhimReducer,
-  QuanLyRapReducer,
-  QuanLyNguoiDungReducer,
-  QuanLyDatVeReducer
+  FilmManagementReducer,
+  CinemaManagerReducer,
+  reducerUserManagement,
+  TicketManagementReducer
 });
 export const store = createStore(rootReducer, applyMiddleware(thunk));

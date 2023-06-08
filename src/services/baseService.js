@@ -12,12 +12,22 @@ export const put = (url, model) => {
 };
 
 export const post = (url, model) => {
-  console.log("Bearer " + localStorage.getItem(TOKEN));
+  console.log(`${DOMAIN}/${url}`);
   return axios({
     url: `${DOMAIN}/${url}`,
     method: "POST",
     data: model,
     headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN).replace(/"/g, '')},
+  });
+};
+
+export const postUser = (url, model) => {
+
+  return axios({
+    url: `${DOMAIN}/${url}`,
+    method: "POST",
+    data: model,
+    headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN)},
   });
 };
 

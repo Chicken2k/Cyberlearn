@@ -8,6 +8,7 @@ import {
   bookTickets,
   bookTicketAction,
   TicketManagementActions,
+  bookingSeatAction,
 } from "../../redux/actions/TicketManagementActions";
 import "./Checkout.css";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
@@ -19,31 +20,69 @@ import { BookingInformation } from "../../_core/Models/BookingInformation";
 import { Tabs } from "antd";
 import { historyUserBookingAction } from "../../redux/actions/UserManagementAction";
 import moment from "moment";
+import { connection } from "../..";
 
 function Checkout() {
   const useParam = useParams();
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.reducerUserManagement);
-  const { roomDetails, listofSeatsReserved } = useSelector(
+  const { roomDetails, listofSeatsReserved, listGuestBooking } = useSelector(
     (state) => state.TicketManagementReducer
   );
   const { thongTinPhim, danhSachGhe } = roomDetails;
   const { id } = useParam;
-
   useEffect(() => {
+  
     dispatch(TicketManagementActions(id));
-  }, []);
+    
+    //vừa vào  trang load tất cả ghế đang đặt 
+    
+    connection.invoke('loadDanhSachGhe', id)
+    
+    //load danh sach ghe tu sever về (lắng nghe tín hiêu từ sever trả về )
+    // nếu có 1 sự kiện nào trên sever thì thằng này lắng nghe
+    connection.on("loadDanhSachGheDaDat", (listGuestBooking) => {
+      listGuestBooking = listGuestBooking.filter(
+        (items) => items.taiKhoan !== userLogin.taiKhoan
+      );
+      const arrListSeat = listGuestBooking.reduce((result, value, index) => {
+        let arr = JSON.parse(value.danhSachGhe);
+        return [...result, ...arr];
+      }, []);
+      // đưa dữ liệu ghế khách đặt vé redux
+      dispatch({
+        type: "BOOKING",
+        arrListSeat: arrListSeat,
+      });
+    });
+    // cài đặt sự kiện khi load trang
+    window.addEventListener("beforeunload", clearGhe);
 
+    return () => {
+      clearGhe();
+      window.removeEventListener("beforeunload", clearGhe);
+    };
+  }, []);
+  const clearGhe = function (event) {
+      connection.invoke('huyDat',userLogin.taiKhoan,id)
+  };
   const renderSeats = () => {
     return danhSachGhe.map((seat, index) => {
       let classGheVip = seat.loaiGhe === "Vip" ? "gheVip classGheDaDat" : "";
       let classGheDaDat = seat.daDat === true ? "gheDaDat " : "";
       let classGheDangDat = "";
       let classGheDaDuocDat = "";
+      let classSeatsCustomerOrdered = "";
       let indexGheDD = listofSeatsReserved.findIndex(
         (bookedChair) => bookedChair.maGhe === seat.maGhe
       );
+      let indexSeatsCustomerOrdered = listGuestBooking.findIndex(
+        (SeatsCustomer, index) => SeatsCustomer.maGhe === seat.maGhe
+      );
 
+      if (indexSeatsCustomerOrdered !== -1) {
+        classSeatsCustomerOrdered = "seatsCustomerOrdered";
+      }
       if (indexGheDD !== -1) {
         classGheDangDat = "gheDangDat";
       }
@@ -54,20 +93,19 @@ function Checkout() {
         <Fragment key={index}>
           <button
             onClick={() => {
-              dispatch({
-                type: BOOK_TICKET,
-                selectedChair: seat,
-              });
+              dispatch(bookingSeatAction(seat, id));
             }}
             disabled={seat.daDat}
-            className={`ghe ${classGheVip} ${classGheDaDat} ${classGheDangDat} ${classGheDaDuocDat}`}
+            className={`ghe ${classGheVip} ${classGheDaDat} ${classGheDangDat} ${classGheDaDuocDat} ${classSeatsCustomerOrdered}`}
           >
             {seat.daDat === true ? (
               classGheDaDuocDat != "" ? (
-                <UserOutlined style={{ fontWeight: "bold" }} />
+                <UserOutlined className="iconUserOutlined" />
               ) : (
-                <CloseOutlined style={{ fontWeight: "bold" }} />
+                <CloseOutlined className="iconUserOutlined" />
               )
+            ) : classSeatsCustomerOrdered !== "" ? (
+              <UserOutlined className="iconUserOutlined" />
             ) : (
               seat.stt
             )}
@@ -112,6 +150,7 @@ function Checkout() {
                   <th>Ghế vip</th>
                   <th>Ghế đã đặt</th>
                   <th>Ghế mình đặt</th>
+                  <th>Ghế đang đặt</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -119,45 +158,36 @@ function Checkout() {
                   <td style={{ textAlign: "center" }}>
                     <button className="ghe text-center">
                       {" "}
-                      <UserOutlined
-                        style={{
-                          marginBottom: 7.5,
-                          fontWeight: "bold",
-                          textAlign: "center",
-                        }}
-                      />{" "}
+                      <UserOutlined className="iconUserOutlined" />{" "}
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDangDat text-center">
                       {" "}
-                      <UserOutlined
-                        style={{ marginBottom: 7.5, fontWeight: "bold" }}
-                      />
+                      <UserOutlined className="iconUserOutlined" />
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
                     <button className="ghe gheVip text-center">
-                      <UserOutlined
-                        style={{ marginBottom: 7.5, fontWeight: "bold" }}
-                      />
+                      <UserOutlined className="iconUserOutlined" />
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDaDat text-center">
                       {" "}
-                      <UserOutlined
-                        style={{ marginBottom: 7.5, fontWeight: "bold" }}
-                      />{" "}
+                      <CloseOutlined className="iconUserOutlined" />{" "}
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
                     <button className="ghe gheDaDuocDat text-center">
                       {" "}
-                      <UserOutlined
-                        style={{ marginBottom: 7.5, fontWeight: "bold" }}
-                      />{" "}
+                      <UserOutlined className="iconUserOutlined" />{" "}
                     </button>{" "}
+                  </td>
+                  <td style={{ textAlign: "center" }}>
+                    <button className="ghe seatsCustomerOrdered text-center">
+                      <UserOutlined className="iconUserOutlined" />
+                    </button>
                   </td>
                 </tr>
               </tbody>

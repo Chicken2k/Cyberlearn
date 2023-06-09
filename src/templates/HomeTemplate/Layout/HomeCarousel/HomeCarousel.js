@@ -21,6 +21,7 @@ export default function HomeCarousel(props) {
     //2 (phải cài middleware);
     //callBackFunciton(dispatch)
     dispatch(getCarouselAction());
+    console.log(11);
   }, []);
 
   const renderImg = () => {

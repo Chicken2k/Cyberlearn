@@ -8,9 +8,9 @@ import {
 
 const stateDefault = {
   roomDetails: new ShowtimeInformation(),
-  listofSeatsReserved: [],
+  listofSeatsReserved: [], // danh sachs ghe dang dat 
   tabActive: "1",
-  listGuestBooking : [{}]
+  listGuestBooking : []
 };
 export const TicketManagementReducer = (state = stateDefault, action) => {
   switch (action.type) {
@@ -36,7 +36,9 @@ export const TicketManagementReducer = (state = stateDefault, action) => {
     case SWITCH_TABS:
       state.tabActive = action.tabActive;
       return { ...state };
-
+    case 'BOOKING':
+      state.listGuestBooking = action.arrListSeat;
+    return { ...state};
     default:
       return { ...state };
   }

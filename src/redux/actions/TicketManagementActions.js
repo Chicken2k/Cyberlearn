@@ -1,3 +1,4 @@
+import { connection } from "../..";
 import { bookTickets, getBookingDetails } from "../../services/TicketManagementServices";
 import { BOOK_TICKET, SET_TICKET_OFFICE_DETAILS, SUCCESSFUL_TICKET_BOOKING } from "./Types/QuanLyDatVeType";
 
@@ -14,7 +15,7 @@ export const TicketManagementActions = (movieShowtimeCode) =>{
                     roomDetails:result.data.content
                 })
             }
-            dispatch({type:'HIDE_LOADING'})
+            dispatch({type:'HIDE_LOADING'})  
         }
         catch(errors){
             dispatch({type:'HIDE_LOADING'})
@@ -35,5 +36,24 @@ export const bookTicketAction =(bookingInformation)=>{
         dispatch({type:'HIDE_LOADING'})
         console.log('errors', error.response.data);
         }
+    }
+}
+
+
+export const bookingSeatAction =(seat,movieShowtimeCode)=>{
+    return async (dispatch,getState)=>{
+        await  dispatch({
+            // đưa dữ liệu lên reducer
+            type: BOOK_TICKET,
+            selectedChair: seat,
+          })
+          // call  api về backend
+            let listofSeatsReserved = getState().TicketManagementReducer.listofSeatsReserved
+            let userLogin = getState().reducerUserManagement.userLogin.taiKhoan
+            //biến mảng thành chuỗi 
+            listofSeatsReserved = JSON.stringify(listofSeatsReserved)
+            //call api signlR
+            //datGhe định nghĩa ở sever
+            connection.invoke('datGhe',userLogin,listofSeatsReserved,movieShowtimeCode)
     }
 }

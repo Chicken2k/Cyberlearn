@@ -16,11 +16,7 @@ export default function Home(props) {
     dispatch(getMovieListAction());
     dispatch(getListofCinemaSystemAction());
   }, []);
-  // const renderArrFilm = () => {
-  //  return arrFilm.map((item, index) => {
-  //   return <Film key={index} />
-  //   });
-  // };
+
 
   return (
     <div>

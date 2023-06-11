@@ -1,5 +1,5 @@
 import {historyUserBookingService, login } from "../../services/UserManagementService";
-import { HISTORY_USER_BOOKING, LOG_IN_ACTION } from "./Types/QuanLyNguoiDungType";
+import { HISTORY_USER_BOOKING, LOG_IN_ACTION } from "./Types/UserManagementType";
 
 export const logInAction = (loginInformation) => {
   return async (dispatch) => {

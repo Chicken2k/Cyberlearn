@@ -15,7 +15,7 @@ import { CloseOutlined, UserOutlined } from "@ant-design/icons";
 import {
   BOOK_TICKET,
   SWITCH_TABS,
-} from "../../redux/actions/Types/QuanLyDatVeType";
+} from "../../redux/actions/Types/TicketManagementType";
 import { BookingInformation } from "../../_core/Models/BookingInformation";
 import { Tabs } from "antd";
 import { historyUserBookingAction } from "../../redux/actions/UserManagementAction";
@@ -32,16 +32,16 @@ function Checkout() {
   const { thongTinPhim, danhSachGhe } = roomDetails;
   const { id } = useParam;
   useEffect(() => {
-  
     dispatch(TicketManagementActions(id));
-    
-    //vừa vào  trang load tất cả ghế đang đặt 
-    
-    connection.invoke('loadDanhSachGhe', id)
-    
+
+    //vừa vào  trang load tất cả ghế đang đặt
+
+    connection.invoke("loadDanhSachGhe", id);
+
     //load danh sach ghe tu sever về (lắng nghe tín hiêu từ sever trả về )
     // nếu có 1 sự kiện nào trên sever thì thằng này lắng nghe
     connection.on("loadDanhSachGheDaDat", (listGuestBooking) => {
+      // loại ra khỏi acc của mình ra khỏi danh sách khách hàng
       listGuestBooking = listGuestBooking.filter(
         (items) => items.taiKhoan !== userLogin.taiKhoan
       );
@@ -64,16 +64,17 @@ function Checkout() {
     };
   }, []);
   const clearGhe = function (event) {
-      connection.invoke('huyDat',userLogin.taiKhoan,id)
+    connection.invoke("huyDat", userLogin.taiKhoan, id);
   };
+
   const renderSeats = () => {
     return danhSachGhe.map((seat, index) => {
-      let classGheVip = seat.loaiGhe === "Vip" ? "gheVip classGheDaDat" : "";
-      let classGheDaDat = seat.daDat === true ? "gheDaDat " : "";
-      let classGheDangDat = "";
-      let classGheDaDuocDat = "";
+      let classSeatVip = seat.loaiGhe === "Vip" ? "SeatVip classBookedSeat" : "";
+      let classBookedSeat = seat.daDat === true ? "bookedSeat " : "";
+      let classSeatsAreBooked = "";
+      let classMySeat = "";
       let classSeatsCustomerOrdered = "";
-      let indexGheDD = listofSeatsReserved.findIndex(
+      let indexBookedSeat = listofSeatsReserved.findIndex(
         (bookedChair) => bookedChair.maGhe === seat.maGhe
       );
       let indexSeatsCustomerOrdered = listGuestBooking.findIndex(
@@ -83,11 +84,11 @@ function Checkout() {
       if (indexSeatsCustomerOrdered !== -1) {
         classSeatsCustomerOrdered = "seatsCustomerOrdered";
       }
-      if (indexGheDD !== -1) {
-        classGheDangDat = "gheDangDat";
+      if (indexBookedSeat !== -1) {
+        classSeatsAreBooked = "selectedSeat";
       }
       if (userLogin.taiKhoan === seat.taiKhoanNguoiDat) {
-        classGheDaDuocDat = "gheDaDuocDat";
+        classMySeat = "MySeat";
       }
       return (
         <Fragment key={index}>
@@ -96,10 +97,10 @@ function Checkout() {
               dispatch(bookingSeatAction(seat, id));
             }}
             disabled={seat.daDat}
-            className={`ghe ${classGheVip} ${classGheDaDat} ${classGheDangDat} ${classGheDaDuocDat} ${classSeatsCustomerOrdered}`}
+            className={`ghe ${classSeatVip} ${classBookedSeat} ${classSeatsAreBooked} ${classMySeat} ${classSeatsCustomerOrdered}`}
           >
             {seat.daDat === true ? (
-              classGheDaDuocDat != "" ? (
+              classMySeat != "" ? (
                 <UserOutlined className="iconUserOutlined" />
               ) : (
                 <CloseOutlined className="iconUserOutlined" />
@@ -162,24 +163,24 @@ function Checkout() {
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <button className="ghe gheDangDat text-center">
+                    <button className="ghe selectedSeat text-center">
                       {" "}
                       <UserOutlined className="iconUserOutlined" />
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <button className="ghe gheVip text-center">
+                    <button className="ghe SeatVip text-center">
                       <UserOutlined className="iconUserOutlined" />
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <button className="ghe gheDaDat text-center">
+                    <button className="ghe bookedSeat text-center">
                       {" "}
                       <CloseOutlined className="iconUserOutlined" />{" "}
                     </button>{" "}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <button className="ghe gheDaDuocDat text-center">
+                    <button className="ghe MySeat text-center">
                       {" "}
                       <UserOutlined className="iconUserOutlined" />{" "}
                     </button>{" "}
@@ -195,7 +196,7 @@ function Checkout() {
           </div>
         </div>
 
-        <div className="col-span-3">
+        <div className="col-span-3 shadow-xl">
           <h3 className="text-green-400 text-center text-4xl">
             {listofSeatsReserved.reduce((total, currenvalue) => {
               return total + currenvalue.giaVe;
@@ -203,52 +204,55 @@ function Checkout() {
             đ
           </h3>
           <hr />
-          <h3 className="text-xl mt-2">{thongTinPhim.tenPhim}</h3>
-          <p>{thongTinPhim.diaChi}</p>
-          <p>{thongTinPhim.ngayChieu}</p>
-          <hr />
-          <div className="flex flex-row my-5">
-            <div className="w-4/5">
-              <span className="text-red-500"> GHẾ </span>
-              <span className="text-green-500 text-xl">
-                {listofSeatsReserved
-                  .sort((a, b) => {
-                    return a.stt - b.stt;
-                  })
-                  .map((gheDDSST, index) => {
-                    return <span key={index}> {gheDDSST.stt}</span>;
-                  })}
-              </span>
+          <div className="ml-5">
+            <h3 className="text-xl mt-2">{thongTinPhim.tenPhim}</h3>
+            <p>{thongTinPhim.diaChi}</p>
+            <p>{thongTinPhim.ngayChieu}</p>
+            <hr />
+            <div className="flex flex-row my-5">
+              <div className="w-4/5">
+                <span className="text-black   text-xl"> Ghế đã chọn </span>
+                <span className="text-green-500 text-xl">
+                  {listofSeatsReserved
+                    .sort((a, b) => {
+                      return a.stt - b.stt;
+                    })
+                    .map((gheDDSST, index) => {
+                      return <span key={index}> {gheDDSST.stt}</span>;
+                    })}
+                </span>
+              </div>
+              <div className="text-right col-span-1">
+                <span className="text-green-800 text-lg">
+                  {" "}
+                  {listofSeatsReserved.reduce((total, currenvalue) => {
+                    return total + currenvalue.giaVe;
+                  }, 0)}{" "}
+                  đ
+                </span>
+              </div>
             </div>
-            <div className="text-right col-span-1">
-              <span className="text-green-800 text-lg">
-                {" "}
-                {listofSeatsReserved.reduce((total, currenvalue) => {
-                  return total + currenvalue.giaVe;
-                }, 0)}{" "}
-                đ
-              </span>
+            <hr />
+            <div className="my-5">
+              <span className=" text-xl mb-2">Email</span> <br />
+              <span>{userLogin.email}</span>
             </div>
-          </div>
-          <hr />
-          <div className="my-5">
-            <i>Email</i> <br />
-            {userLogin.email}
-          </div>
-          <hr />
-          <div className="my-5">
-            <i>Phone</i> <br></br>
-            {userLogin.soDT}
-          </div>
-          <hr />
-          <div className="mb-0 h-full flex flex-col items-center">
-            <div
-              onClick={() => {
-                handleBooking();
-              }}
-              className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer"
-            >
-              Dat Ve
+            <hr />
+            <div className="my-5 ">
+              <i className="text-xl">Phone</i> <br></br>
+              {userLogin.soDT}
+            </div>
+            <hr />
+            <div className="mb-0 h-full flex flex-col items-center">
+              <div
+                onClick={() => {
+                  handleBooking();
+                }}
+                className="bg-green-500 text-white w-full text-center py-3 font-bold text-2xl cursor-pointer custom-btn btn-5 "
+                style={{ width: "100%", height: "50xp" }}
+              >
+                Đặt Vé
+              </div>
             </div>
           </div>
         </div>
@@ -302,23 +306,18 @@ function BookingHistory() {
     });
   };
   return (
-    <Fragment>
+    <>
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">
             <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-purple-600">
               Lịch sử đặt vé
             </h1>
-            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-              Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical
-              gentrify, subway tile poke farm-to-table. Franzen you probably
-              haven't heard of them.
-            </p>
           </div>
           <div className="flex flex-wrap -m-2">{renderHistory()}</div>
         </div>
       </section>
-    </Fragment>
+    </>
   );
 }
 
@@ -342,11 +341,14 @@ export default function MyComponent() {
     },
   ];
   return (
+  <div className="ml-5">
     <Tabs
       defaultActiveKey="1"
       activeKey={tabActive}
       items={items}
       onChange={onChange}
+      className="shadow-xl"
     />
+  </div>
   );
 }

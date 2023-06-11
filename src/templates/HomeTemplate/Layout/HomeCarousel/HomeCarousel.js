@@ -5,11 +5,13 @@ import axios from "axios";
 import { getCarouselAction } from "../../../../redux/actions/CarouselAction";
 
 const contentStyle = {
-  height: "400px",
+  height: "600px",
   color: "#fff",
   lineHeight: "160px",
   textAlign: "center",
   background: "#364d79",
+  backgroundSize: 'cover',
+  // backgroundPosition: 'center',
 };
 export default function HomeCarousel(props) {
   // kết nối với vs state
@@ -21,7 +23,6 @@ export default function HomeCarousel(props) {
     //2 (phải cài middleware);
     //callBackFunciton(dispatch)
     dispatch(getCarouselAction());
-    console.log(11);
   }, []);
 
   const renderImg = () => {
@@ -33,7 +34,7 @@ export default function HomeCarousel(props) {
           >
             <img
               src={item.hinhAnh}
-              className="w-full opacity-0"
+              className="w-full opacity-0 img"
               alt={item.hinhAnh}
             />
           </div>

@@ -17,3 +17,7 @@
 .none_active_Film {
     @apply bg-white text-gray-800;
 }
+.button_Active_Film {
+    text-align: center !important;
+    background-color: red;
+}

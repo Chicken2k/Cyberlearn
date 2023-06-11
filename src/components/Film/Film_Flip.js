@@ -40,23 +40,26 @@ export default function Film_Flip(props) {
             }}
           >
             <div>
-              <div className="rounded-full cursor-pointer">
-                <PlayCircleOutlined style={{ fontSize: "50px" }} />
-              </div>
               <div className="text-2xl mt-2 font-bold">{item.tenPhim}</div>
+              <div className="rounded-full cursor-pointer">
+                {/* <PlayCircleOutlined style={{ fontSize: "50px" }} /> */}
+                <button className="custom-btn btn-5 mr-1">TRAILE</button>
+                <button className="custom-btn btn-5"   onClick={() => {
+          navigate(`/detail/${item.maPhim}`);
+        }} >ĐẶT VÉ </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div
+      {/* <div
         onClick={() => {
-        navigate(`/detail/${item.maPhim}`)
-     
+          navigate(`/detail/${item.maPhim}`);
         }}
         className="bg-orange-300 text-center cursor-pointer py-2 bg-indigo-300 my-2 text-success-50 font-bold"
       >
         ĐẶT VÉ
-      </div>
+      </div> */}
     </div>
   );
 }

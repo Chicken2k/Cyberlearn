@@ -1,16 +1,16 @@
-import { ShowtimeInformation } from "../../_core/Models/ThongTinPhongVe";
+import { ShowtimeInformation } from "../../_core/Models/TicketOfficeInformation";
 import {
   BOOK_TICKET,
   SET_TICKET_OFFICE_DETAILS,
   SUCCESSFUL_TICKET_BOOKING,
   SWITCH_TABS,
-} from "../actions/Types/QuanLyDatVeType";
+} from "../actions/Types/TicketManagementType";
 
 const stateDefault = {
   roomDetails: new ShowtimeInformation(),
   listofSeatsReserved: [], // danh sachs ghe dang dat 
   tabActive: "1",
-  listGuestBooking : []
+  listGuestBooking : [],
 };
 export const TicketManagementReducer = (state = stateDefault, action) => {
   switch (action.type) {

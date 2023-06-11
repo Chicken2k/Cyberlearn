@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DOMAIN } from "./util/Setting/config";
 // Câu hình realtime
 import * as signalR from "@aspnet/signalr";
-
+import './i18n';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 //Đoạn code để kết nối đến server lắng nghe sự kiện từ server
 export const connection = new signalR.HubConnectionBuilder()

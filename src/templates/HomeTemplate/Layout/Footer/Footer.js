@@ -1,58 +1,62 @@
-import { AppleOutlined, FacebookOutlined } from '@ant-design/icons'
-import _ from 'lodash'
-import React from 'react'
-import { useSelector } from 'react-redux';
+import { AppleOutlined, FacebookOutlined } from "@ant-design/icons";
+import _ from "lodash";
+import React from "react";
+import { useSelector } from "react-redux";
 
 export default function Footer(props) {
+  const { CinemaSystem } = useSelector((state) => state.CinemaManagerReducer);
 
-    const {CinemaSystem} = useSelector(state => state.CinemaManagerReducer);
-   
-    const arrHeThongRap = _.map(CinemaSystem,(heThongRap) => _.pick(heThongRap,['maHeThongRap','tenHeThongRap','logo']));
+  const arrHeThongRap = _.map(CinemaSystem, (heThongRap) =>
+    _.pick(heThongRap, ["maHeThongRap", "tenHeThongRap", "logo"])
+  );
 
-    
-    return (
-        <footer className="py-6 bg-coolGray-100 text-coolGray-900 bg-gray-800">
-            <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
-                <div className="grid grid-cols-12">
-                    <div className="pb-6 col-span-full md:pb-0 md:col-span-6">
-                        <a href="#" className="flex justify-center space-x-3 md:justify-start text-black">
-                           
-                            <img src="https://cyberlearn.vn/wp-content/uploads/2020/03/cyberlearn-min-new-opt2.png" alt="cyberlearn.vn"/>
-                        </a>
-                    </div>
-                    <div className="col-span-6 text-center md:text-left md:col-span-3">
-                        <p className="pb-1 text-lg font-medium text-white">PARTNER</p>
-                        <div className="grid grid-cols-3" style={{color:'#fff'}}>
-                            {arrHeThongRap.map((htr,index) => {
-                                return <div key={index}>
-                                <img src={htr.logo} style={{width:50}} />
-                            </div>
-                            })}
-                        </div>
-                    </div>
-                    <div className="col-span-6 text-center md:text-left md:col-span-3 text-white">
-                        <p className="pb-1 text-lg font-medium">Mobile app</p>
-                        <div className="flex text-white">
-                            <div className="mr-5">
-                            <AppleOutlined className="text-2xl" /> 
-                            </div>
-                            <div>
-                            <FacebookOutlined className="text-2xl"/>
-                            </div>
-                          
-                        </div>
-                    </div>
-                </div>
-                <div className="grid justify-center pt-6 lg:justify-between text-white">
-                    <div className="flex flex-col self-center text-sm text-center md:block lg:col-start-1 md:space-x-6">
-                        <span>©2021 All rights reserved</span>
-                    </div>
+  return (
+    <footer className="py-6 bg-coolGray-100 text-coolGray-900 bg-gray-800">
+      <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
+        <div className="grid grid-cols-12">
+          <div className="pb-6 col-span-full md:pb-0 md:col-span-6">
+            <a
+              href="#"
+              className="flex justify-center space-x-3 md:justify-start text-black"
+            >
+              <img
+                src="https://www.runsystem.vn/wp-content/themes/runsystem/assets/images/logo-header-color.png"
+                alt="runsystem"
+              />
+            </a>
+          </div>
+          <div className="col-span-6 text-center md:text-left md:col-span-3">
+            <p className="pb-1 text-lg font-medium text-white">PARTNER</p>
+            <div className="grid grid-cols-3" style={{ color: "#fff" }}>
+              {arrHeThongRap.map((htr, index) => {
+                return (
+                  <div key={index}>
+                    <img src={htr.logo} style={{ width: 50 }} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="col-span-6 text-center md:text-left md:col-span-3 text-white">
+            <p className="pb-1 text-lg font-medium">Mobile app</p>
+            <div className="flex text-white">
+              <div className="mr-5">
+                <AppleOutlined className="text-2xl" />
+              </div>
+              <div>
+                <FacebookOutlined className="text-2xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="grid justify-center pt-6 lg:justify-between text-white">
+          <div className="flex flex-col self-center text-sm text-center md:block lg:col-start-1 md:space-x-6">
+            <span>©2021 All rights reserved</span>
+          </div>
 
-                    <div className="">
+          <div className=""></div>
 
-                    </div>
-
-                    {/* <div className="flex justify-center pt-4 space-x-4 lg:pt-0 lg:col-end-13">
+          {/* <div className="flex justify-center pt-4 space-x-4 lg:pt-0 lg:col-end-13">
                         <a href="#" className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-600 text-coolGray-50">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -70,9 +74,8 @@ export default function Footer(props) {
                             </svg>
                         </a>
                     </div> */}
-                </div>
-            </div>
-        </footer>
-
-    )
+        </div>
+      </div>
+    </footer>
+  );
 }

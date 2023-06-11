@@ -47,17 +47,17 @@ export default function Detail(props) {
                 style={{ width: "100$", height: 300 }}
                 alt="123"
               ></img>
-              <div className="col-span-2 ml-5" style={{ marginTop: "25%" }}>
+              <div className="col-span-2 ml-5" >
                 <p className="text-sm">
-                  Ngay chieu :
+                  Ngày chiếu :
                   {moment(filmDetail.ngayKhoiChieu).format("DD.MM.YYYY")}
                 </p>
-                <p className="text-4xl leading-3">{filmDetail.tenPhim}</p>
+                <p className="text-4xl leading-9">{filmDetail.tenPhim}</p>
                 <p>{filmDetail.moTa}</p>
               </div>
             </div>
           </div>
-          <div className="col-span-4">
+          <div className="col-span-4 ml-5">
             <h1
               style={{
                 marginLeft: "15%",
@@ -117,7 +117,7 @@ export default function Detail(props) {
                                   src={Cineplex.hinhAnh}
                                   style={{ width: 50 }}
                                 ></img>
-                                <div>
+                                <div className="ml-2">
                                   <p
                                     style={{
                                       fontSize: 20,

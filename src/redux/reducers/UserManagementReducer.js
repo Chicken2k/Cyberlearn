@@ -2,7 +2,7 @@ import { TOKEN, USER_LOGIN } from "../../util/Setting/config";
 import {
   HISTORY_USER_BOOKING,
   LOG_IN_ACTION,
-} from "../actions/Types/QuanLyNguoiDungType";
+} from "../actions/Types/UserManagementType";
 
 let user = {};
 if (localStorage.getItem(USER_LOGIN)) {

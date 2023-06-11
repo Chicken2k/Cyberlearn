@@ -1,6 +1,6 @@
 
 import { getListofTheaterSystems, getMovieShowtimeInformation } from "../../services/CinemaManagerService"
-import { SET_DETAILS_MOVIE, SET_CINEMA_SYSTEM } from "./Types/QuayLyRapType"
+import { SET_DETAILS_MOVIE, SET_CINEMA_SYSTEM } from "./Types/CinemaManagerType"
 
 export const getListofCinemaSystemAction = ()=>{
     return async (dispatch) =>{

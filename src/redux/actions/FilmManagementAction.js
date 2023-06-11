@@ -1,6 +1,6 @@
 // import { getMovieList } from "../../services/FilmManagementServic";
 import { getMovieList } from "../../services/FilmManagementService";
-import { SET_LIST_MOVIE } from "./Types/QuanLyphimType";
+import { SET_LIST_MOVIE } from "./Types/FilmManagementType";
 
 export const getMovieListAction = () => {
   return async (dispatch) => {

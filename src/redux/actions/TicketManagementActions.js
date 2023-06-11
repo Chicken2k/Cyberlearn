@@ -1,6 +1,7 @@
 import { connection } from "../..";
 import { bookTickets, getBookingDetails } from "../../services/TicketManagementServices";
-import { BOOK_TICKET, SET_TICKET_OFFICE_DETAILS, SUCCESSFUL_TICKET_BOOKING } from "./Types/QuanLyDatVeType";
+import { USER_LOGIN } from "../../util/Setting/config";
+import { BOOK_TICKET, SET_TICKET_OFFICE_DETAILS, SUCCESSFUL_TICKET_BOOKING } from "./Types/TicketManagementType";
 
 
 export const TicketManagementActions = (movieShowtimeCode) =>{
@@ -49,11 +50,14 @@ export const bookingSeatAction =(seat,movieShowtimeCode)=>{
           })
           // call  api về backend
             let listofSeatsReserved = getState().TicketManagementReducer.listofSeatsReserved
+            const userLocalStorage = JSON.parse(localStorage.getItem(USER_LOGIN));
             let userLogin = getState().reducerUserManagement.userLogin.taiKhoan
             //biến mảng thành chuỗi 
             listofSeatsReserved = JSON.stringify(listofSeatsReserved)
+            // console.log(userLogin);
+            // console.log(userLocalStorage.taiKhoan);
             //call api signlR
             //datGhe định nghĩa ở sever
-            connection.invoke('datGhe',userLogin,listofSeatsReserved,movieShowtimeCode)
+            // connection.invoke('datGhe',userLocalStorage.taiKhoan,listofSeatsReserved.taiKhoan,movieShowtimeCode)
     }
 }

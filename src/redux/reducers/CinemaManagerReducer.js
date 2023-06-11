@@ -1,4 +1,4 @@
-import { SET_CINEMA_SYSTEM } from "../actions/Types/QuayLyRapType";
+import { SET_CINEMA_SYSTEM } from "../actions/Types/CinemaManagerType";
 
 const stateDefault = {
   CinemaSystem: [],

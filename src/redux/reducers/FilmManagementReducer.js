@@ -2,8 +2,8 @@ import {
   SET_LIST_MOVIE,
   SET_FILM_PLAYING_SHOWING,
   SET_FILM_COMING_SOON,
-} from "../actions/Types/QuanLyphimType";
-import { SET_DETAILS_MOVIE } from "../actions/Types/QuayLyRapType";
+} from "../actions/Types/FilmManagementType";
+import { SET_DETAILS_MOVIE } from "../actions/Types/CinemaManagerType";
 
 const stateDefault = {
   arrFilm: [
@@ -39,7 +39,7 @@ const stateDefault = {
     },
   ],
   movieIsPlay: true,
-  upcomingMovie: true,
+  upcomingMovie: false,
   arrFilmDefault: [],
   filmDetail:{}
 };
@@ -54,12 +54,15 @@ export const FilmManagementReducer = (state = stateDefault, action) => {
       state.arrFilm = state.arrFilmDefault.filter(
         (film) => film.dangChieu  === state.movieIsPlay
       );
-      
+      state.upcomingMovie = false
+      state.movieIsPlay = true
       return { ...state };
     case SET_FILM_COMING_SOON:
       state.arrFilm = state.arrFilmDefault.filter(
         (film) => film.sapChieu  === state.upcomingMovie 
       );
+      state.movieIsPlay = false
+      state.upcomingMovie = true
       return { ...state };
     case SET_DETAILS_MOVIE:
       state.filmDetail = action.filmDetail

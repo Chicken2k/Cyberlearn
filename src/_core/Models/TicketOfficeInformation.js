@@ -13,13 +13,3 @@ export class ThongTinPhim {
     ngayChieu ='';
     gioChieu = '';
 }
-export class Ghe{
-    maGhe = '';
-    tenGhe = '';
-    mapRap = '';
-    loaiGhe = '';
-    stt = '';
-    giaVe = '';
-    daDat = '';
-    taiKhoanNguoiDat = '';
-}
